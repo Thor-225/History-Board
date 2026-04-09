@@ -1,0 +1,63 @@
+<%
+  layout = false;
+  const isLoggedIn = typeof user !== 'undefined' && user;
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> - The History Board</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+
+  <nav>
+    <div class="nav-brand">The History Board</div>
+    <% if (isLoggedIn) { %>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/create-post" class="btn">+ New Board</a>
+        <div class="nav-user">
+          Welcome, <strong><%= username %></strong>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="nav-links">
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+      </div>
+    <% } %>
+  </nav>
+
+  <div class="container">
+    <a href="/" class="back-link">← Back to Home</a>
+
+    <div class="card">
+      <h1><%= post.title %></h1>
+      
+      <div class="post-meta">
+        by <strong><%= post.username %></strong> 
+        on <%= new Date(post.created_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }) %>
+      </div>
+
+      <div class="post-content"><%= post.content %></div>
+
+      <% if (isLoggedIn && user === post.user_id) { %>
+        <div class="post-actions">
+          <form method="POST" action="/delete-post/<%= post.id %>" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this post? This action cannot be undone.');">
+            <button type="submit" class="btn btn-danger">Delete Board</button>
+          </form>
+          <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

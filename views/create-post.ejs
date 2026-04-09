@@ -1,0 +1,56 @@
+<%
+  layout = false;
+  const isLoggedIn = typeof user !== 'undefined' && user;
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Board - The History Board</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body class="create-post">
+
+  <nav>
+    <div class="nav-brand">The History Board</div>
+    <% if (isLoggedIn) { %>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/create-post" class="btn">+ New Board</a>
+        <div class="nav-user">
+          Welcome, <strong><%= username %></strong>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    <% } %>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h1>Create New Board</h1>
+
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert"><%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/create-post">
+        <div class="form-group">
+          <label for="title">Board Title</label>
+          <input type="text" id="title" name="title" required placeholder="Enter your board title">
+        </div>
+
+        <div class="form-group">
+          <label for="content">Board Content</label>
+          <textarea id="content" name="content" required placeholder="Write your board content here..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn">Publish Board</button>
+          <a href="/" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'The History Board' %></title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">The History Board</div>
+    <% if (user) { %>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/create-post" class="btn">+ New Board</a>
+        <div class="nav-user">
+          Welcome, <strong><%= username %></strong>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="nav-links">
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+      </div>
+    <% } %>
+  </nav>
+
+  <div class="container">
+    <%- body %>
+  </div>
+</body>
+</html>
