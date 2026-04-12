@@ -1,3 +1,4 @@
+<%# Primary function: provide a common shared page layout for authenticated and guest views. %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
   <link href="/styles.css" rel="stylesheet">
 </head>
 <body>
+  <%# Navigation shared by all pages, showing login state and links. %>
   <nav>
     <div class="nav-brand">The History Board</div>
     <% if (user) { %>
@@ -26,6 +28,7 @@
     <% } %>
   </nav>
 
+  <%# Page content placeholder where each view is rendered. %>
   <div class="container">
     <%- body %>
   </div>

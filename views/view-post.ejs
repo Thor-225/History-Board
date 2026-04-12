@@ -2,6 +2,7 @@
   layout = false;
   const isLoggedIn = typeof user !== 'undefined' && user;
 %>
+<%# Primary function: render a history board post along with its comments and actions for the author. %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +12,13 @@
   <link href="/styles.css" rel="stylesheet">
 </head>
 
+  <%# Navigation header with links and login status for the user. %>
   <nav>
     <div class="nav-brand">The History Board</div>
     <% if (isLoggedIn) { %>
       <div class="nav-links">
         <a href="/">Home</a>
-        <a href="/create-post" class="btn">+ New Board</a>
+        <a href="/create-post" class="btn">+ New History Board</a>
         <div class="nav-user">
           Welcome, <strong><%= username %></strong>
           <a href="/logout">Logout</a>
@@ -31,9 +33,11 @@
   </nav>
 
   <div class="container">
+    <%# Main content area containing the selected post and its comments. %>
     <a href="/" class="back-link">← Back to Home</a>
 
     <div class="card">
+      <%# Display the selected history board title and author details. %>
       <h1><%= post.title %></h1>
       
       <div class="post-meta">
@@ -49,12 +53,69 @@
 
       <div class="post-content"><%= post.content %></div>
 
+      <%# Show edit/delete controls only for the author of this post. %>
       <% if (isLoggedIn && user === post.user_id) { %>
         <div class="post-actions">
+          <a href="/edit-post/<%= post.id %>" class="btn">Edit History Board</a>
           <form method="POST" action="/delete-post/<%= post.id %>" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this post? This action cannot be undone.');">
-            <button type="submit" class="btn btn-danger">Delete Board</button>
+            <button type="submit" class="btn btn-danger">Erase from History</button>
           </form>
           <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Comments Section -->
+    <%# Comments section displays existing discussions and allows new replies. %>
+    <div class="comments-section">
+      <h2>Historical Discussions</h2>
+      
+      <% if (comments && comments.length > 0) { %>
+        <% comments.forEach(comment => { %>
+          <%# Individual comment block shown with author, date, and actions. %>
+          <div class="comment">
+            <div class="comment-meta">
+              <strong><%= comment.username %></strong>
+              <span class="comment-date"><%= new Date(comment.created_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              }) %></span>
+              <% if (isLoggedIn && user === comment.user_id) { %>
+                <div class="comment-actions">
+                  <a href="/edit-comment/<%= comment.id %>" class="btn btn-small">Edit</a>
+                  <form method="POST" action="/delete-comment/<%= comment.id %>" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                  </form>
+                </div>
+              <% } %>
+            </div>
+            <div class="comment-content"><%= comment.content %></div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="no-comments">
+          <p>No discussions yet. Be the first to share your historical insights!</p>
+        </div>
+      <% } %>
+
+      <% if (isLoggedIn) { %>
+        <%# Comment form for logged-in users to add a new observation. %>
+        <div class="comment-form">
+          <h3>Add Your Historical Perspective</h3>
+          <form method="POST" action="/add-comment/<%= post.id %>">
+            <div class="form-group">
+              <textarea name="content" placeholder="Share your thoughts on this historical topic..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Comment</button>
+          </form>
+        </div>
+      <% } else { %>
+        <%# Prompt guests to log in so they can contribute to the conversation. %>
+        <div class="comment-login-prompt">
+          <p><a href="/login">Login</a> to join the historical discussion.</p>
         </div>
       <% } %>
     </div>

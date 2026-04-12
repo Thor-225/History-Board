@@ -2,6 +2,7 @@
   layout = false;
   const isLoggedIn = typeof user !== 'undefined' && user;
 %>
+<%# Primary function: show the home page with all history boards for the logged-in user. %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +12,13 @@
   <link href="/styles.css" rel="stylesheet">
 </head>
 <body>
+  <%# Navigation bar for the home page, showing links based on login state. %>
   <nav>
     <div class="nav-brand">The History Board</div>
     <% if (isLoggedIn) { %>
       <div class="nav-links">
         <a href="/">Home</a>
-        <a href="/create-post" class="btn">+ New Board</a>
+        <a href="/create-post" class="btn">+ New History Board</a>
         <div class="nav-user">
           Welcome, <strong><%= username %></strong>
           <a href="/logout">Logout</a>
@@ -31,9 +33,11 @@
   </nav>
 
   <div class="container">
+    <%# Container for the list of boards and the empty state message. %>
     <h1>All Boards</h1>
 
     <% if (posts && posts.length > 0) { %>
+      <%# Loop through each board and render a summary card. %>
       <% posts.forEach(post => { %>
         <div class="card" onclick="window.location.href='/post/<%= post.id %>'">
           <div class="post-title"><%= post.title %></div>
@@ -54,12 +58,13 @@
         </div>
       <% }); %>
     <% } else { %>
+      <%# Show this message when there are no boards yet. %>
       <div class="empty-state">
-        <p>No boards yet. Be the first to create one!</p>
+        <p>The annals of history await your contribution. Be the first to create a history board!</p>
         <% if (isLoggedIn) { %>
-          <a href="/create-post" class="btn">Create Your First Board</a>
+          <a href="/create-post" class="btn">Create Your First History Board</a>
         <% } else { %>
-          <a href="/signup" class="btn">Sign Up to Create Boards</a>
+          <a href="/signup" class="btn">Join the Historical Discourse</a>
         <% } %>
       </div>
     <% } %>

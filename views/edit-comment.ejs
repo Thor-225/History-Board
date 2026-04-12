@@ -1,0 +1,57 @@
+<%
+  layout = false;
+  const isLoggedIn = typeof user !== 'undefined' && user;
+%>
+<%# Primary function: render the page for editing an existing comment. %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Comment - The History Board</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body>
+
+  <%# Navigation header with login link and user info when available. %>
+  <nav>
+    <div class="nav-brand">The History Board</div>
+    <% if (isLoggedIn) { %>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/create-post" class="btn">+ New History Board</a>
+        <div class="nav-user">
+          Welcome, <strong><%= username %></strong>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="nav-links">
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+      </div>
+    <% } %>
+  </nav>
+
+  <div class="container">
+    <%# Main card containing the comment edit form and context. %>
+    <div class="card">
+      <h1>Edit Comment</h1>
+      <p class="comment-context">On: <strong><%= comment.post_title %></strong></p>
+
+      <%# Form for editing a single existing comment. %>
+      <form method="POST" action="/edit-comment/<%= comment.id %>">
+        <div class="form-group">
+          <label for="content">Comment</label>
+          <textarea id="content" name="content" required placeholder="Share your thoughts on this historical topic..."><%= comment.content %></textarea>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn">Update Comment</button>
+          <a href="/post/<%= comment.post_id %>" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -2,24 +2,24 @@
   layout = false;
   const isLoggedIn = typeof user !== 'undefined' && user;
 %>
-<%# Primary function: render the page for creating a new history board post. %>
+<%# Primary function: render the page for editing a history board post. %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create History Board - The History Board</title>
+  <title>Edit History Board - The History Board</title>
   <link href="/styles.css" rel="stylesheet">
 </head>
 <body class="create-post">
 
-  <%# Navigation bar shown to logged-in users when creating a board. %>
+  <%# Navigation bar for the edit page, visible only when logged in. %>
   <nav>
     <div class="nav-brand">The History Board</div>
     <% if (isLoggedIn) { %>
       <div class="nav-links">
         <a href="/">Home</a>
-        <a href="/create-post" class="btn">+ Chronicle New Tale</a>
+        <a href="/create-post" class="btn">+ New History Board</a>
         <div class="nav-user">
           Welcome, <strong><%= username %></strong>
           <a href="/logout">Logout</a>
@@ -29,30 +29,30 @@
   </nav>
 
   <div class="container">
-    <%# Main panel for entering a new history board post. %>
+    <%# Page content area containing the edit form. %>
     <div class="card">
-      <h1>Create New History Board</h1>
+      <h1>Edit History Board</h1>
 
       <% if (typeof error !== 'undefined') { %>
-        <%# Display any form validation errors here. %>
+        <%# Display an error if updating the post failed. %>
         <div class="alert"><%= error %></div>
       <% } %>
 
-      <%# Form to submit a new board title and content to the server. %>
-      <form method="POST" action="/create-post">
+      <%# Form to update the chosen post title and content. %>
+      <form method="POST" action="/edit-post/<%= post.id %>">
         <div class="form-group">
           <label for="title">Board Title</label>
-          <input type="text" id="title" name="title" required placeholder="What historical event or figure shall we explore?">
+          <input type="text" id="title" name="title" required value="<%= post.title %>" placeholder="What historical event or figure shall we explore?">
         </div>
 
         <div class="form-group">
           <label for="content">Historical Content</label>
-          <textarea id="content" name="content" required placeholder="Share your insights, facts, and perspectives on this piece of history..."></textarea>
+          <textarea id="content" name="content" required placeholder="Share your insights, facts, and perspectives on this piece of history..."><%= post.content %></textarea>
         </div>
 
         <div class="button-group">
-          <button type="submit" class="btn">Publish History Board</button>
-          <a href="/" class="btn btn-secondary">Return to Home</a>
+          <button type="submit" class="btn">Update History Board</button>
+          <a href="/post/<%= post.id %>" class="btn btn-secondary">Cancel</a>
         </div>
       </form>
     </div>

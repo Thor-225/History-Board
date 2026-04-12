@@ -1,4 +1,5 @@
 <% layout = false %>
+<%# Primary function: render the signup page for new user registration. %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +11,15 @@
 <body class="auth-page">
 
   <div class="container">
+    <%# Main sign-up box for new user registration. %>
     <h1>Sign Up</h1>
     
     <% if (typeof error !== 'undefined') { %>
+      <%# Show validation errors if registration fails. %>
       <div class="alert"><%= error %></div>
     <% } %>
 
+    <%# Signup form posts username and password to the server. %>
     <form method="POST" action="/signup">
       <div class="form-group">
         <label for="username">Username</label>
@@ -35,6 +39,7 @@
       <button type="submit" class="btn">Sign Up</button>
     </form>
 
+    <%# Link to the login page for users who already have an account. %>
     <div class="auth-link">
       Already have an account? <a href="/login">Login here</a>
     </div>
